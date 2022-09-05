@@ -1,24 +1,29 @@
-const ORDER_ASC_BY_NAME = "AZ";
-const ORDER_DESC_BY_NAME = "ZA";
+const ORDER_ASC_BY_COST = "-+";
+const ORDER_DESC_BY_COST = "+-";
 const ORDER_BY_PROD_COUNT = "Cant.";
 let currentProductsArray = [];
 let currentSortCriteria = undefined;
 let minCount = undefined;
 let maxCount = undefined;
+let catID = localStorage.getItem("catID");
+let listaProductos = `https://japceibal.github.io/emercado-api/cats_products/${catID}.json`;
+let nombreCat = "hola";
+
+document.getElementById("usuario").innerHTML = `${localStorage.getItem('username')}`;
 
 function sortProducts(criteria, array){
     let result = [];
-    if (criteria === ORDER_ASC_BY_NAME)
+    if (criteria === ORDER_ASC_BY_COST)
     {
         result = array.sort(function(a, b) {
-            if ( a.name < b.name ){ return -1; }
-            if ( a.name > b.name ){ return 1; }
+            if ( a.cost < b.cost ){ return -1; }
+            if ( a.cost > b.cost ){ return 1; }
             return 0;
         });
-    }else if (criteria === ORDER_DESC_BY_NAME){
+    }else if (criteria === ORDER_DESC_BY_COST){
         result = array.sort(function(a, b) {
-            if ( a.name > b.name ){ return -1; }
-            if ( a.name < b.name ){ return 1; }
+            if ( a.cost > b.cost ){ return -1; }
+            if ( a.cost < b.cost ){ return 1; }
             return 0;
         });
     }else if (criteria === ORDER_BY_PROD_COUNT){
@@ -88,20 +93,23 @@ function sortAndShowProducts(sortCriteria, productsArray){
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
 document.addEventListener("DOMContentLoaded", function(e){
-    getJSONData(AUTOS_URL).then(function(resultObj){
+
+    getJSONData(listaProductos).then(function(resultObj){
         if (resultObj.status === "ok"){
-            currentProductsArray = resultObj.data.products
+            currentProductsArray = resultObj.data.products;
+            nombreCat = resultObj.data.catName;
             showProductsList()
             //sortAndShowCategories(ORDER_ASC_BY_NAME, resultObj.data);
         }
+        document.getElementById("textoCat").innerHTML = `Estas viendo los productos de la categoría <strong>${nombreCat}</strong>.`
     });
 
     document.getElementById("sortAsc").addEventListener("click", function(){
-        sortAndShowProducts(ORDER_ASC_BY_NAME);
+        sortAndShowProducts(ORDER_ASC_BY_COST);
     });
 
     document.getElementById("sortDesc").addEventListener("click", function(){
-        sortAndShowProducts(ORDER_DESC_BY_NAME);
+        sortAndShowProducts(ORDER_DESC_BY_COST);
     });
 
     document.getElementById("sortByCount").addEventListener("click", function(){
@@ -140,4 +148,5 @@ document.addEventListener("DOMContentLoaded", function(e){
 
         showProductsList();
     });
+
 });

@@ -31,4 +31,5 @@ formulario.addEventListener('submit', function(e) {
             document.getElementById('email-input').style.border= "";
         }
     }
+    localStorage.setItem('username', textoEmail);
 });

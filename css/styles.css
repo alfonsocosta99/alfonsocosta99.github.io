@@ -199,3 +199,7 @@ a.custom-card:hover {
 #alerta-pass, #alerta-email {
   color: red;
 }
+
+#usuario {
+  color: white;
+}
